@@ -1,0 +1,29 @@
+Table
+  Strong Entity - PK(Candidate Key- Select the primary key)
+  Primary Key - Single column
+  Composite Key - More than 2 columns combine to become primary key
+  Derived Entity - prost gre(Inheritance) 
+  Foreign Key -> Primary key of teh parent table appearing in the child
+
+Atribute
+   Simple - Single unit of data
+   Multi Value  -> more than one unit of data, Cannot be logicaly seperated
+   Complex  -> More than one unitof data - Can be split logically -Ex. Address
+   Derived -> Value from anothe column
+
+
+Normalization
+1NF 
+-> Every column should have similar type of data
+-> Every entity should have PK
+-> No Multi-values attribute
+
+2NF - Applicable for composite key
+-> Tables Shold be in 1NF
+-> No Partial dependency
+
+3NF
+-> Tables should be in 2NF
+-> No Transitive dependency
+
+
