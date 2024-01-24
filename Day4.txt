@@ -1,0 +1,65 @@
+select sum(rental_rate) Total_Rent from film
+--NOt possible
+--
+select film_id, sum(rental_rate) Total_Rent from film
+--
+select sum(rental_rate), avg(rental_rate) Average_Rent from film
+select avg(rental_rate), round(avg(rental_rate)) Average_Rent from film
+select avg(rental_rate), round(avg(rental_rate),2) Average_Rent from film
+select avg(rental_rate), round(avg(rental_rate),-1) Average_Rent from film
+
+
+select rating,sum(rental_rate) Total_Rent from film
+group by rating
+---fetch the average of replacement cost for every rating
+select rating,round(avg(replacement_cost),2) Average_Replacement_Cost from film
+group by rating
+
+--fetch the average of replacement cost for every rating for those movies which have 
+--e in their description
+select rating,round(avg(replacement_cost),2) "Average Replacement" from film 
+where description like '%e%' or description like '%E%'
+group by rating
+---average of amount for every customer
+select customer_id,round(avg(amount),2) average_payment from payment
+group by customer_id
+---payment date less than "2007-02-19 19:39:56.996577"
+select customer_id,round(avg(amount),2) average_payment from payment
+where payment_date < '2007-02-19 19:39:56.996577'
+group by customer_id
+
+select customer_id,round(avg(amount),2) average_payment from payment
+where payment_date < '2007-02-19 19:39:56.996577'
+group by customer_id
+having round(avg(amount),2) > 4
+
+--fetch all the film which have priced greater than the average price pf al the fils
+select * from film where rental_rate> avg(rental_rate)
+
+---select the rating and the mim of replacement cost for every rating i
+--if the min is > 2
+--Also only fetch those films which have 'the' in their name
+
+select rating,min(replacement_cost) "Average Replacement" from film 
+where title like '%The%' or title like '%the%'
+group by rating
+having min(replacement_cost)>2
+
+select * from film order by rating
+select * from film order by rating desc
+
+select title,rating,rental_rate  from film order by rating ,rental_rate desc
+select * from payment
+where payment_date < '2007-02-19 19:39:56.996577'
+order by customer_id
+
+select rating,round(avg(replacement_cost),2) "Average Replacement" from film 
+where description like '%e%' or description like '%E%'
+group by rating
+order by 1 desc
+
+select rating,min(replacement_cost) "Average Replacement" from film 
+where title like '%The%' or title like '%the%'
+group by rating
+having min(replacement_cost)>2
+order by 1 desc

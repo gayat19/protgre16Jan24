@@ -1,0 +1,148 @@
+create table Areas
+(area varchar(20) constraint pk_Area primary key,
+Zipcode char(6) not null)
+
+select column_name , table_name, data_type from information_schema.columns
+where table_name = 'areas'
+
+select area from areas
+
+create table employees
+(id int generated always as identity,
+name varchar(20) not null,
+area varchar(20) )
+
+select * from employees
+
+insert into areas values('ABC','123456')
+
+insert into employees(name,area) values('Ramu','ABC')
+
+drop table employees
+
+create table employees
+(id int generated always as identity(start with 101 increment by 1),
+name varchar(20) not null,
+area varchar(20) )
+
+create table identitysample
+(id int null,
+name varchar(10))
+
+alter table identitysample
+drop column id 
+
+drop table identitysample
+
+create table identitysample
+(id int not null,
+name varchar(10))
+
+alter table identitysample
+alter column id add generated always as identity
+
+alter table identitysample
+alter column id drop identity if exists
+
+alter table areas
+drop constraint pk_area
+
+alter table areas
+add constraint pk_area primary key(area)
+
+alter table employees
+add constraint fk_area foreign key(area) references areas(Area)
+
+alter table employees
+add constraint pk_employee primary key(id)
+
+create table employeeskills
+(employee_id int references employees(id),
+skill_name varchar(20),
+skil_level float,
+constraint pk_employeeskill primary key(employee_id,skill_name))
+
+select id  employee_id from employees
+
+drop table employees
+
+select * from areas
+
+insert into areas values('XYZ','23456')
+insert into areas values('IJK','87654'),('LOP','23456')
+
+update areas set zipcode = '11111' where area = 'XYZ'
+
+update areas as ar
+    set zipcode = case 
+				when ar.area = 'XYZ' Then '22222'
+				when ar.area = 'LOP' Then '33333'
+				else '11111'
+			end
+create table tbl1
+(f1 int,
+f2 varchar(2))
+
+insert into tbl1 values(1,'ab'),(1,'bb'),(1,'cc'),(1,'dd')
+
+update tbl1 set f1 = case
+			when f2='ab' then f1+10
+			when f2 = 'bb' then f1+20
+			else f1+2
+			end
+select * from tbl1
+
+delete from tbl1 where f2 = 'ab'
+
+delete from tbl1
+
+truncate tbl1
+
+drop table tbl1
+create table tbl1
+(f1 int generated always as identity,
+f2 varchar(2))
+
+select * from tbl1
+
+insert into tbl1(f2) values('ab'),('bb'),('cc'),('dd')
+delete from tbl1
+
+truncate tbl1 restart identity
+
+
+select * from employees;
+
+select * from areas;
+
+insert into employees(name,area) values('Dimu','AAA')
+
+delete from areas where area = 'ABC'
+
+
+create table tbl2
+(f1 int primary key,
+f2 varchar(2))
+
+create table tbl3
+(f3 int generated always as identity,
+f4 int references tbl2(f1) on delete cascade)
+
+insert into tbl2 values(1,'ab')
+
+insert into tbl3(f4) values(1)
+
+select * from tbl3
+
+delete from tbl2 where f1 = 1
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,50 @@
+Select * from film
+
+select film_id, title from film
+
+select film_id movie_id, title movie_name from film
+
+--Select Movie names with the rating of PG-13
+
+select title movie_name, rating from film where rating = 'PG-13'
+
+--select movie which have length more than 75 mins
+select title movie_name, length movie_duration from film where length>75
+
+--select movie names which have rental rate < 1
+select title movie_name, rental_rate from film where rental_rate<1
+
+--select the movies which have rental rate greater than 1 and less than 3
+select title movie_name, rental_rate from film where rental_rate<=3 and rental_rate>=1
+select title movie_name, rental_rate from film where rental_rate between 1 and 3
+
+--select the movies that have rental >3 and are of rating PG-13
+select title movie_name, rental_rate, rating from film where rental_rate>3 and rating = 'PG-13'
+
+--select the details of the movie with name '"Anthem Luke"'
+select * from film where title = 'Anthem Luke'
+
+--select movies that have rating that is PG-13 or NC-17 or R
+select title movie_name, rating from film where rating = 'PG-13' or rating = 'NC-17' or rating = 'R'
+select title movie_name, rating from film where rating in( 'PG-13','NC-17' ,'R')
+
+create type status_enum as
+ENUM('Closed','Open','In-Progress')
+
+create table requests
+(id int primary key,
+request_test varchar(1000),
+status status_enum)
+
+insert into requests values(3,'Blah blah','Closed')
+insert into requests values(4,'Blew blew','CLosed')
+
+--select the films which have the first letter of the movie name as 'A'
+select title from film where title like 'A%'
+
+--select the films which have the movie name that contains 'o'
+select title from film where title like '%o%' or title like '%O%'
+
+--select movies  that are drama
+select title from film where description like '%drama%' or description like '%Drama%'
+
