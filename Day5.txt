@@ -1,0 +1,80 @@
+select staff_id,customer_id, count(rental_id) Number_Of_Rents from rental 
+group by staff_id, customer_ID
+having count(rental_id)>15
+order by staff_id,customer_id
+
+--fetch all the film which have priced greater than the average price pf al the films
+select * from film where rental_rate > (select avg(rental_rate) from film)
+
+select * from city order by country_id
+--select the address which are from country id 6
+select * from city where country_id = 6
+
+select * from address where  city_id in (select city_id from city where country_id = 6)
+
+select * from actor
+
+--print the movies started by "Jennifer"
+
+select * from film where film_id in
+(select film_id from film_actor where actor_id in
+(select actor_id from actor where first_name = 'Jennifer'))
+
+
+select * from category
+
+--select film acted by "Jennifer" and is of category "Action"
+select * from film where film_id in
+(select film_id from film_actor where actor_id in
+(select actor_id from actor where first_name = 'Jennifer'))
+and film_id in (select film_id from film_category where category_id =
+			  (select category_id from category where name = 'Action'))
+--
+select * from rental
+
+select * from film where film_id in
+(select film_id from inventory where inventory_id in
+(select distinct inventory_id from rental where staff_id = 2))
+
+select  * from country
+
+--print all the customers from "Argentina"
+select * from customer
+where address_id in
+(select address_id from address where city_id in
+(select city_id from city where country_id =
+(select country_id from country where country = 'Argentina')))
+
+--select the film which have rental greater than all the films of category Action
+select * from film where rental_rate > all
+(select rental_rate from film where 
+film_id in (select film_id from film_category where category_id =
+			  (select category_id from category where name = 'Comedy')))
+			  
+select * from film where rental_rate > 
+(select max(rental_rate) from film where 
+film_id in (select film_id from film_category where category_id =
+			  (select category_id from category where name = 'Comedy')))
+			  
+--select the film which have rental greater than any the films of category Action
+select * from film where rental_rate > 
+(select min(rental_rate) from film where 
+film_id in (select film_id from film_category where category_id =
+			  (select category_id from category where name = 'Comedy')))
+--------------------------------------------------------------------------
+select * from areas
+
+create table dummy_areas
+(area varchar(10),
+zipcode varchar(10))
+
+insert into dummy_areas
+select * from areas where zipcode like '%1%'
+
+select * from dummy_areas
+
+create table mosy_dummy_areas
+as
+select * from areas where zipcode like '%1%'
+
+select * from mosy_dummy_areas
