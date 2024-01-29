@@ -1,0 +1,77 @@
+Co-Related Sub Queries
+select film_id,title, length,rating from film 
+where length>(select avg(length) from film)
+
+select rating,avg(length) from film 
+group by rating
+
+select film_id,title, length,rating from film f
+where length>(select avg(length) from film where rating = f.rating)
+------------------------------------------------------
+Joins
+
+Cross
+   
+Inner
+  Equi
+  Non Equi
+  Self
+Outer
+
+select * from language cross join city
+select * from language, city
+
+--Fiml name and language name
+
+Select title,name from film join language
+on film.language_id = language.language_id
+
+Select title,name from film f join language l
+on f.language_id = l.language_id
+
+Select title,name from film f inner join language l
+on f.language_id = l.language_id
+
+Select title,l.language_id,name from film f inner join language l
+on f.language_id = l.language_id
+
+--select rental date and the staff full name
+select date(rental_date), concat(first_name,' ',last_name) staff_name
+from rental r join staff s
+on r.staff_id = s.staff_id
+
+select to_char(date(rental_date),'DD/MM/YYYY'), concat(first_name,' ',last_name) staff_name
+from rental r join staff s
+on r.staff_id = s.staff_id
+
+
+--selectfilm name and actor name
+select title,concat(first_name,' ', last_name) actor_name from
+film f join film_actor fa
+on f.film_id=fa.film_id
+join actor a
+on fa.actor_id = a.actor_id
+
+---All languages and film name 
+Select title,l.language_id,name from film f right  join language l
+on f.language_id = l.language_id
+
+
+----Fiml name and language name where the fim name has 'The' in it
+Select title,name from film f inner join language l
+on f.language_id = l.language_id
+where title like '%The%' or title like '%the%'
+
+--Language name and the count of movies in that language
+Select name, count(title) number_of_movies from film f right join language l
+on f.language_id = l.language_id
+group by name
+
+
+
+
+
+
+
+
+
