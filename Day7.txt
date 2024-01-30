@@ -1,0 +1,80 @@
+select name,title from category c join film_category fc
+on c.category_id = fc.category_id
+join film f
+on fc.film_id = f.film_id
+
+select name,title from category c left outer join film_category fc
+on c.category_id = fc.category_id
+left outer join film f
+on fc.film_id = f.film_id
+
+--fetch all the countries and address if available
+select country,city,address from country c  left outer join city ct
+on c.country_id = ct.country_id
+left outer join address a on ct.city_id=a.city_id
+
+
+---select customer name of thouse customers who have rented amount 
+--more than the customer who come from "Lethbridge"		
+
+select distinct concat(c1.first_name,' ',c1.last_name) from customer c1 join payment p
+on c1.customer_id = p.customer_id 
+where p.amount >  (select max(amount) from payment where customer_id in
+					  (select customer_id from customer where
+					   address_id in (select address_id from address where
+					   city_id =
+					  (select city_id from city where city='Sasebo'))))
+					  
+select address_id from customer
+
+select city_id from address where address_id = 5
+
+select city from city where city_id = 463
+
+--print film name ordered in descending order with the sum of 
+--amount collected as rent if the sum is greater than 50
+--only for film rated G
+select title,sum(amount) from film f join inventory i
+on f.film_id=i.film_id
+join rental r on i.inventory_id = r.inventory_id
+join payment p on r.rental_id = p.rental_id
+where rating = 'G'
+group by title
+having sum(amount)>50
+order by title desc
+
+
+create table CompanyEmployee
+(id int primary key,
+name varchar(20),
+salary float,
+manager_id int)
+
+alter table CompanyEmployee
+add constraint fk_mgr_id foreign key(manager_id) references CompanyEmployee(id)
+
+insert into CompanyEmployee values(1,'Ramu',12345.5,null)
+insert into CompanyEmployee values(2,'Somu',3214.6,1);
+insert into CompanyEmployee values(3,'Bimu',2233.8,2);
+insert into CompanyEmployee values(4,'Gomu',1234.5,2);
+
+select * from CompanyEmployee
+
+--print the employee_id and manager_id
+select id,manager_id from CompanyEmployee
+
+--employee name and the manager name
+select emp.id employee_id,emp.name employee_name,
+mgr.id manager_id,mgr.name manager_name
+from CompanyEmployee emp join CompanyEmployee mgr
+on emp.manager_id = mgr.id
+
+
+--all the employee and if available manager details
+select emp.id employee_id,emp.name employee_name,
+mgr.id manager_id,mgr.name manager_name
+from CompanyEmployee emp left outer join CompanyEmployee mgr
+on emp.manager_id = mgr.id
+
+
+
