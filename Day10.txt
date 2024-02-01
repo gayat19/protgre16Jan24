@@ -1,0 +1,126 @@
+Variable for storing teh rw/value
+to fetch data in to it
+condition
+
+
+
+error codes link
+https://www.postgresql.org/docs/current/errcodes-appendix.html
+
+create or replace procedure display_greet()
+language plpgsql
+as $$
+begin
+   raise notice 'Hello World';
+end;
+$$
+
+call display_greet()
+
+create or replace procedure display_name(text)
+language plpgsql
+as $$
+begin
+   raise notice 'Hello World %',$1;
+end;
+$$
+
+call display_name('Ramu')
+
+create or replace procedure display_name(cname text)
+language plpgsql
+as $$
+begin
+   raise notice 'Hello World %',cname;
+end;
+$$
+
+call display_name('Ramu')
+
+
+select * from CompanyEmployee
+
+
+create or replace procedure Insert_Employee(int,varchar,float,int)
+language plpgsql
+as $$
+begin
+   insert into CompanyEmployee values($1,$2,$3,$4);
+end;
+$$
+
+call Insert_Employee(3,'gimu',2233.4,1);
+
+create or replace procedure Check_Film(fid int)
+language plpgsql
+as $$
+begin
+   if(select count(*) from film where film_id=fid)>0
+   Then
+      raise notice 'Film found';
+   end if;
+end;
+$$
+
+call Check_Film(10)
+
+
+
+
+create or replace procedure Insert_Employee(int,varchar,float,int)
+language plpgsql
+as $$
+begin
+   declare 
+      emp_row CompanyEmployee%rowtype;
+	 begin
+   		insert into CompanyEmployee values($1,$2,$3,$4);
+		select * from CompanyEmployee into emp_row where id=$1;
+		if not found then
+		    raise notice 'Employee not created';
+		else
+			 raise notice 'Employee tagged';
+		end if;
+	end;
+end;
+$$
+
+call Insert_Employee(2,'Dimu',3452.3,2)
+
+create or replace procedure Insert_Employee(int,varchar,float,int)
+language plpgsql
+as $$
+begin
+   	insert into CompanyEmployee values($1,$2,$3,$4);
+	Exception
+	when unique_violation then
+	   raise notice 'Duplicate employee id';
+end;
+$$
+
+
+create or replace procedure FindMovie(fid int)
+language plpgsql
+as $$
+begin
+   declare 
+      film_row film%rowtype;
+	 begin
+		select * from film into film_row where film_id=fid;
+		if not found then
+		    raise notice 'No such film with id %',fid;
+		else
+			 raise notice 'Bingo!!! the movie name is %',film_row.title;
+		end if;
+	end;
+end;
+$$
+
+call FindMovie(10344)
+
+
+
+
+
+
+

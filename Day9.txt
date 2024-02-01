@@ -1,0 +1,4 @@
+Stored Procedure
+    Pre Compiled Queries
+    Execution plan is generated only once
+    Data security by avoiding data injection
