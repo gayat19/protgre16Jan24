@@ -1,0 +1,80 @@
+Debug5
+Debug4
+Debug3
+Debug2
+Debug1
+Log
+Notice
+warning
+Info
+
+create or replace procedure Insert_Employee(int,varchar,float,int)
+language plpgsql
+as $$
+begin
+   	insert into CompanyEmployee values($1,$2,$3,$4);
+	Exception
+	when unique_violation then
+	   raise notice 'Duplicate employee id';
+end;
+$$
+
+select * from CompanyEmployee
+
+call Insert_Employee(2,'Dimu',3452.3,2)
+
+
+create or replace procedure Insert_Employee(int,varchar,float,int)
+language plpgsql
+as $$
+begin
+    declare
+		name_count int;
+	begin
+	select count(*) from CompanyEmployee into name_count where name = $2;
+	raise notice 'The number of people with same name as % are %',$2,name_count;
+	if(name_count>0)then
+	   Raise Exception 'Duplicate Name %',$2 using hint ='name has to be unique';
+	 end if;
+   	insert into CompanyEmployee values($1,$2,$3,$4);
+	Exception
+	when unique_violation then
+	   raise notice 'Duplicate employee id';
+	end;
+end;
+$$
+
+call Insert_Employee(2,'Dimu',3452.3,2)
+
+set client_min_messages = 'debug';
+do $$
+Begin
+  Raise info 'All information %',now();
+  Raise Log 'Used in Exceptions %',now();
+  raise Debug 'While development %',now();
+  raise notice 'Just message %',now();
+  --raise Exception 'For the user defined exceptions %',now();
+  raise warning 'Resource issues and others %',now();
+end$$
+
+do $$
+<<outer_block>>
+declare 
+   num1 integer :=0;
+   num2 integer :=100;
+   begin
+      num1 = num1+100;
+	  raise notice 'The value of num1 after first change is %',num1;
+	  --inner block
+	  declare 
+	     num1 integer :=0;
+		 begin
+		    num1 = (num1+10)*num2;
+			raise notice 'The value of num1 i the inner block is %',num1;
+			raise notice 'The value of num1 of the outer block in the inner block is %',outer_block.num1;
+		 end;
+	   raise notice 'The value of num1 after the inner block execution is %',num1;
+end outer_block $$;
+
+
+
