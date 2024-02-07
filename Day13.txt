@@ -1,0 +1,91 @@
+create or replace function <functionname>(variable <datatype>,[variable <datatype>])
+returns <datatype>
+as 
+$$
+begin
+end;
+$$
+language plpgsql;
+
+
+Direction of parameters In, OUT, InOut
+
+create or replace function fn_Sample(name varchar)
+returns void
+as 
+$$
+begin
+   raise notice 'Hello %', name;
+end;
+$$
+language plpgsql;
+
+select * from fn_Sample('Ramu');
+
+
+create or replace function fn_calulatetax(inout baseamount int,tax int)
+as 
+$$
+begin
+   select (baseamount+(baseamount*tax/100)) into baseamount;
+end;
+$$
+language plpgsql;
+
+select fn_calulatetax(1000,12);
+-------------------------------
+create or replace function fnSwapNumber(inout num1 int,inout num2 int)
+as 
+$$
+begin
+     select num1,num2 into num2,num1;
+end;
+$$
+language plpgsql;
+
+select * from fnSwapNumber(100,200);
+
+select * from staff
+
+drop function fn_LoginCheck
+
+create or replace function fn_LoginCheck(usrname varchar(20),passwrd varchar(20))
+returns varchar
+as 
+$$
+begin
+   declare
+       uname varchar(40);
+	begin
+	    select concat(first_name,' ',last_name) from staff into uname 
+		where first_name = usrname and last_name = passwrd;
+		return uname;
+		
+	end;
+end;
+$$
+language plpgsql;
+
+
+drop function fn_LoginCheck
+
+create or replace function fn_LoginCheck(usrname varchar(20),passwrd varchar(20))
+returns boolean
+as 
+$$
+begin
+   declare
+       pass_check boolean;
+	begin
+	    select (last_name = passwrd) into pass_check
+		from staff where first_name = usrname;
+		return pass_check;
+	end;
+end;
+$$
+language plpgsql;
+
+
+select * from fn_LoginCheck('Mike','Hillyer');
+
+
