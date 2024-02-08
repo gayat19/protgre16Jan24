@@ -1,0 +1,161 @@
+Table values function
+Function with cursors
+
+
+https://www.postgresql.org/docs/current/functions.html - pre defined functions
+
+
+create or replace function fn_MovieTime(id int)
+returns table(
+	film_id int,
+	title varchar
+)
+as 
+$$
+begin
+     return query select f.film_id,f.title from film f where f.film_id = id;
+end;
+$$
+language plpgsql;
+
+select * from film
+
+select * from fn_MovieTime(10)
+
+create or replace function fn_MovieTime_modified(id int)
+returns table(
+	fid int,
+	movie_name varchar
+)
+as 
+$$
+begin
+     return query select film_id movie_Id,title movie_name from film f where film_id = id;
+end;
+$$
+language plpgsql;
+
+select * from fn_MovieTime_modified(10)
+
+create or replace function fn_Show_Movie_Details()
+returns void
+as 
+$$
+declare 
+  cur_film refcursor;
+  frow film%rowtype;
+begin
+   open cur_film for select * from film;
+   
+	   fetch from cur_film into frow;
+	   raise notice 'The movie name is %',frow.title;
+	 
+	close cur_film;
+   
+end;
+$$
+language plpgsql;
+
+
+
+select * from film;
+
+create or replace function fn_Show_Movie_Details()
+returns void
+as 
+$$
+declare 
+  cur_film refcursor;
+  frow film%rowtype;
+begin
+   open cur_film for select * from film;
+   
+	   
+	  loop
+	  	fetch from cur_film into frow;
+		raise notice 'Is the row available %',found;
+		exit when not found;
+	   	raise notice 'The movie name is %',frow.title;
+	  end loop;
+	 
+	close cur_film;
+   
+end;
+$$
+language plpgsql;
+
+
+select * from fn_Show_Movie_Details();
+
+create or replace function fn_Show_Movie_Details()
+returns void
+as 
+$$
+declare 
+  cur_film refcursor;
+  frow film%rowtype;
+begin
+   open cur_film for select * from film;
+   
+	   fetch last from cur_film into frow;
+	  loop
+	  	exit when not found;
+	  	raise notice 'The movie name is %',frow.title;
+	  	fetch prior from cur_film into frow;
+		--raise notice 'Is the row available %',found;
+	  end loop;
+	 
+	close cur_film;
+   
+end;
+$$
+language plpgsql;
+
+
+select * from fn_Show_Movie_Details();
+
+create table EmployeesSkills
+(
+	id serial primary key,
+	name varchar(20),
+	skills text Array
+)
+
+insert into EmployeesSkills(name,skills) 
+values('Ramu',array['C','C++','PostGre']),
+('Bimu',array['C++','PostGre','Java']),
+('Somu',array['C','.NET']),
+('Dimu',array['python','R']);
+
+insert into EmployeesSkills(name,skills) 
+values('Tomu',array['PostGre','C'])
+
+
+select * from EmployeesSkills
+
+
+--The first element in teh array
+select name, skills[1] from EmployeesSkills
+
+
+select name, cardinality(skills) from EmployeesSkills
+
+select name, skills from EmployeesSkills
+where skills[1] = 'C'
+
+select name, skills from EmployeesSkills
+where 'C' = Any(skills);
+
+--converts the array to relation of rows
+select name,unnest(skills) from  EmployeesSkills 
+
+
+--Staring and ending index
+select name, skills[2:3] from EmployeesSkills
+
+
+--every row as json object
+select row_to_json(f) film_data from film f
+
+
+
