@@ -1,0 +1,102 @@
+Trigger
+
+https://www.postgresql.org/docs/current/sql-createtrigger.html
+Function template for trigger function 
+
+
+create or replace function <function name>()
+returns trigger
+language plpgsql
+as
+$$
+begin
+  
+    
+  return new;
+end;
+$$
+
+
+create or replace trigger <Triger name>
+after/before/instead of <action>
+on <table name>
+for each row/
+execute procedure <function name()>
+
+
+create temp table film
+as
+select first_name,last_name from customer
+
+drop table film
+
+select * from tblTempNames where last_name = 'Ely'
+
+update tblTempNames set first_name = 'abc' where last_name = 'Ely'
+
+select * from film
+
+
+with sample_film as
+(select rating,sum(length) from film group by rating)
+select * from sample_film
+
+select * from CompanyEmployee
+
+create table EMployee_registry
+(id int,
+join_date date)
+
+
+create or replace function fnRegisterEmployeeTrg()
+returns trigger
+language plpgsql
+as
+$$
+begin
+  insert into EMployee_registry values(new.id,now());
+  return new;
+end;
+$$
+
+create or replace trigger trg_InsertEmployee
+after insert
+on CompanyEmployee
+for each row
+execute procedure fnRegisterEmployeeTrg();
+
+
+
+
+insert into CompanyEmployee values(15,'Tumu',32534.23,4);
+
+select * from CompanyEmployee
+
+select * from EMployee_registry
+------------------------------------------------------------------
+
+
+
+
+create table tblProducts
+(id serial primary key,
+ info json)
+
+
+insert into tblProducts(info)
+values('{"name":"bottle","material":"plastic","price":100}')
+insert into tblProducts(info)
+values('{"name":"knife","material":"steel","price":200,"category":"kitchen"}'),
+('{"name":"bread","material":"edible","price":20,"expires":2}'),
+('{"name":"keyboard","material":"plastic","price":750,"category":"electronics"}')
+
+select * from tblProducts
+
+select info->'price' product_name from tblProducts
+
+select info->>'name' product_name from tblProducts
+where cast(info->>'price' as integer) >150
+
+select info->'name' product_name from tblProducts
+where cast(info->>'price' as integer) >150
+
